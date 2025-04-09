@@ -1,0 +1,58 @@
+// Client-side implementation
+function requestGameBoard() {
+    fetch('/gameboard')
+        .then(response => response.json())
+        .then(data => {
+            const gameBoardHtml = data.game_board_html;
+            document.getElementById('game-board').innerHTML = gameBoardHtml;
+        });
+}
+
+function rollDice() {
+    fetch('/roll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+    })
+        .then(response => response.json())
+        .then(data => {
+            const diceRollResult = data.dice_roll_result;
+            movePiece(diceRollResult);
+        });
+}
+
+function movePiece(diceRollResult) {
+    fetch('/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dice_roll_result: diceRollResult })
+    })
+        .then(response => response.json())
+        .then(data => {
+            const gameState = data.game_state;
+            updateGameBoard(gameState);
+        });
+}
+
+function updateGameBoard(gameState) {
+    // Update game board HTML based on game state
+}
+
+function resetGame() {
+    fetch('/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+    })
+        .then(response => response.json())
+        .then(data => {
+            const gameState = data.game_state;
+            updateGameBoard(gameState);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    requestGameBoard();
+    document.getElementById('roll-button').addEventListener('click', rollDice);
+    document.getElementById('reset-button').addEventListener('click', resetGame);
+});
