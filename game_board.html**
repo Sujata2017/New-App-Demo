@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake Ladder Game</title>
+</head>
+<body>
+    <h1>Snake Ladder Game</h1>
+    <div id="game-board"></div>
+    <button id="roll-button">Roll Dice</button>
+    <button id="reset-button">Reset Game</button>
+    <script src="client.js"></script>
+</body>
+</html>
