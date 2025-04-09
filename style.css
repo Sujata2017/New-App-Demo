@@ -1,0 +1,20 @@
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 10px;
+}
+
+.game-cell {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+}
+
+.snake {
+    background-color: #f00;
+}
+
+.ladder {
+    background-color: #0f0;
+}
