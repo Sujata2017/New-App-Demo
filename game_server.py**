@@ -1,0 +1,47 @@
+# Game Server implementation
+from flask import Flask, request, jsonify
+from database import Database
+
+app = Flask(__name__)
+
+# Initialize database connection
+db = Database()
+
+@app.route('/gameboard', methods=['GET'])
+def get_game_board():
+    # Retrieve grid size from database
+    grid_size = db.get_grid_size()
+    # Generate game board HTML
+    game_board_html = generate_game_board_html(grid_size)
+    return jsonify({'game_board_html': game_board_html})
+
+@app.route('/roll', methods=['POST'])
+def roll_dice():
+    # Generate random dice roll result
+    dice_roll_result = generate_dice_roll_result()
+    return jsonify({'dice_roll_result': dice_roll_result})
+
+@app.route('/move', methods=['POST'])
+def move_piece():
+    # Retrieve current game state from database
+    game_state = db.get_game_state()
+    # Update game state based on dice roll result
+    updated_game_state = update_game_state(game_state, request.json['dice_roll_result'])
+    # Update database with new game state
+    db.update_game_state(updated_game_state)
+    return jsonify({'game_state': updated_game_state})
+
+@app.route('/reset', methods=['POST'])
+def reset_game():
+    # Reset game state in database
+    db.reset_game_state()
+    return jsonify({'game_state': db.get_game_state()})
+
+@app.route('/gamestate', methods=['GET'])
+def get_game_state():
+    # Retrieve current game state from database
+    game_state = db.get_game_state()
+    return jsonify({'game_state': game_state})
+
+if __name__ == '__main__':
+    app.run(debug=True)
